@@ -1,4 +1,5 @@
 import type { SitePlugin } from '../types';
+import { cleanUrl } from '../utils/url';
 
 export const bilibili: SitePlugin = {
   name: 'Bilibili',
@@ -9,7 +10,7 @@ export const bilibili: SitePlugin = {
       hint: 'bestvideo + bestaudio，合并为 MP4',
       getCommand: (url) =>
         [
-          `yt-dlp "${url}"`,
+          `yt-dlp "${cleanUrl(url)}"`,
           '--cookies-from-browser chrome',
           '-f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio"',
         ].join(' \\\n'),
@@ -19,7 +20,7 @@ export const bilibili: SitePlugin = {
       hint: '提取最佳音频并转为 MP3',
       getCommand: (url) =>
         [
-          `yt-dlp "${url}"`,
+          `yt-dlp "${cleanUrl(url)}"`,
           '--cookies-from-browser chrome',
           '-f "bestaudio[ext=m4a]"',
           '-x --audio-format mp3',
