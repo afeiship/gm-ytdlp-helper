@@ -14,6 +14,7 @@ export function useClipboard(): UseClipboardReturn {
   }, []);
 
   const copy = useCallback(async (id: string, text: string) => {
+    clearTimeout(timerRef.current);
     try {
       await navigator.clipboard.writeText(text);
       setCopiedId(id);
