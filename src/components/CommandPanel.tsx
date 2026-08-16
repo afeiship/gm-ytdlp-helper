@@ -20,12 +20,8 @@ const CommandPanel: FC<CommandPanelProps> = ({ siteName, commands, currentUrl, o
         onClose();
       }
     };
-    // 延迟添加以避免触发当前点击事件
-    const timer = setTimeout(() => document.addEventListener('click', handler), 0);
-    return () => {
-      clearTimeout(timer);
-      document.removeEventListener('click', handler);
-    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
   }, [onClose]);
 
   return (
@@ -59,7 +55,7 @@ const CommandPanel: FC<CommandPanelProps> = ({ siteName, commands, currentUrl, o
 
             return (
               <div
-                key={idx}
+                key={cmd.label}
                 className={`${idx > 0 ? 'mt-3 border-t border-gray-50 pt-3' : ''}`}
               >
                 <div className="mb-1.5 text-sm font-medium text-gray-800">

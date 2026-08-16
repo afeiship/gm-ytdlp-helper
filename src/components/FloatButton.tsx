@@ -7,7 +7,10 @@ interface FloatButtonProps {
 const FloatButton: FC<FloatButtonProps> = ({ onClick }) => {
   return (
     <button
-      onClick={onClick}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
       className="fixed bottom-6 right-6 z-[9999] flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-[#1677ff] text-lg text-white shadow-lg transition-transform hover:scale-110 active:scale-95"
       style={{ boxShadow: '0 4px 12px rgba(22,119,255,0.4)' }}
     >

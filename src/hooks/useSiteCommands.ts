@@ -16,9 +16,16 @@ function useCurrentUrl(): string {
       handler();
     };
 
+    const origReplaceState = history.replaceState;
+    history.replaceState = function (...args) {
+      origReplaceState.apply(this, args);
+      handler();
+    };
+
     return () => {
       window.removeEventListener('popstate', handler);
       history.pushState = origPushState;
+      history.replaceState = origReplaceState;
     };
   }, []);
 
