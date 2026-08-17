@@ -13,10 +13,10 @@ const CommandPanel: FC<CommandPanelProps> = ({ siteName, commands, currentUrl, o
   const { copiedId, copy } = useClipboard();
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // 点击外部关闭
+  // 点击外部关闭（兼容 Shadow DOM：使用 composedPath 而非 target）
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
+      if (panelRef.current && !panelRef.current.contains(e.composedPath()[0] as Node)) {
         onClose();
       }
     };
