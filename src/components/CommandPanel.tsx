@@ -1,6 +1,10 @@
 import { type FC, useEffect, useRef } from 'react';
+import { Button, Card, Typography } from 'antd';
+import { CloseOutlined, CopyOutlined, CheckOutlined } from '@ant-design/icons';
 import type { Command } from '../types';
 import { useClipboard } from '../hooks/useClipboard';
+
+const { Text, Paragraph } = Typography;
 
 interface CommandPanelProps {
   siteName: string;
@@ -29,26 +33,18 @@ const CommandPanel: FC<CommandPanelProps> = ({ siteName, commands, currentUrl, o
       {/* 遮罩层 */}
       <div className="fixed inset-0 z-[9998]" />
       {/* 面板 */}
-      <div
-        ref={panelRef}
-        className="fixed bottom-24 right-6 z-[9999] w-[380px] rounded-xl bg-white shadow-2xl"
-        style={{ boxShadow: '0 8px 24px rgba(0,0,0,0.15)' }}
-      >
-        {/* 头部 */}
-        <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
-          <span className="text-sm font-semibold text-gray-800">
-            yt-dlp 命令 · {siteName}
-          </span>
-          <button
-            onClick={onClose}
-            className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
-          >
-            ✕
-          </button>
-        </div>
-
-        {/* 命令列表 */}
-        <div className="max-h-[400px] overflow-y-auto px-4 py-3">
+      <div ref={panelRef} className="fixed bottom-24 right-6 z-[9999] w-[380px]">
+        <Card
+          styles={{ body: { padding: 0, maxHeight: 400, overflowY: 'auto' } }}
+          title={
+            <span className="text-sm font-semibold">
+              yt-dlp 命令 · {siteName}
+            </span>
+          }
+          extra={
+            <Button type="text" size="small" icon={<CloseOutlined />} onClick={onClose} />
+          }
+        >
           {commands.map((cmd, idx) => {
             const commandText = cmd.getCommand(currentUrl);
             const isCopied = copiedId === `cmd-${idx}`;
@@ -56,31 +52,36 @@ const CommandPanel: FC<CommandPanelProps> = ({ siteName, commands, currentUrl, o
             return (
               <div
                 key={cmd.label}
-                className={`${idx > 0 ? 'mt-3 border-t border-gray-50 pt-3' : ''}`}
+                className={`px-4 py-3 ${idx > 0 ? 'border-t border-gray-100' : ''}`}
               >
-                <div className="mb-1.5 text-sm font-medium text-gray-800">
+                <Text strong className="mb-1.5 block">
                   {cmd.label}
-                </div>
+                </Text>
                 {cmd.hint && (
-                  <div className="mb-2 text-xs text-gray-400">{cmd.hint}</div>
+                  <Text type="secondary" className="mb-2 block text-xs">
+                    {cmd.hint}
+                  </Text>
                 )}
-                <pre className="mb-2 overflow-x-auto rounded-lg bg-gray-50 p-3 text-xs leading-relaxed text-gray-700">
-                  {commandText}
-                </pre>
-                <button
-                  onClick={() => copy(`cmd-${idx}`, commandText)}
-                  className={`flex cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                    isCopied
-                      ? 'bg-green-50 text-green-600'
-                      : 'bg-[#1677ff] text-white hover:bg-[#4096ff]'
-                  }`}
+                <Paragraph
+                  code
+                  className="mb-2 rounded-lg bg-gray-50 p-3"
+                  style={{ marginBottom: 8 }}
                 >
-                  {isCopied ? '✅ 已复制' : '📋 复制命令'}
-                </button>
+                  {commandText}
+                </Paragraph>
+                <Button
+                  type={isCopied ? 'default' : 'primary'}
+                  size="small"
+                  icon={isCopied ? <CheckOutlined /> : <CopyOutlined />}
+                  onClick={() => copy(`cmd-${idx}`, commandText)}
+                  className={isCopied ? 'text-green-600 border-green-600' : ''}
+                >
+                  {isCopied ? '已复制' : '复制命令'}
+                </Button>
               </div>
             );
           })}
-        </div>
+        </Card>
       </div>
     </>
   );

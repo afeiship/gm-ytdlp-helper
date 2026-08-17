@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/cssinjs": "^2.1.2",
+    "@ant-design/icons": "^6.3.2",
     "@jswork/next": "^1.4.2",
     "ahooks": "^3.9.6",
     "react": "^19.1.1",

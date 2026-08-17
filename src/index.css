@@ -4,6 +4,7 @@
 
 @config "../tailwind.config.js";
 
+@import 'antd/dist/reset.css';
 #monkey-app {
   padding: 10px;
 }

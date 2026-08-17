@@ -1,4 +1,6 @@
 import { createRoot } from 'react-dom/client';
+import { StyleProvider } from '@ant-design/cssinjs';
+import { ConfigProvider } from 'antd';
 import './bootstrap';
 import App from './App';
 import cssText from './index.css?inline';
@@ -22,7 +24,16 @@ createRoot(
     const mountRoot = document.createElement('div');
     shadow.appendChild(mountRoot);
 
+    // Store shadow root for App to use with StyleProvider
+    (window as any).__shadowRoot__ = shadow;
+
     document.body.append(host);
     return mountRoot;
   })()
-).render(<App />);
+).render(
+  <StyleProvider container={(window as any).__shadowRoot__}>
+    <ConfigProvider theme={{ cssVar: { prefix: 'ant', key: 'shadow' } }}>
+      <App />
+    </ConfigProvider>
+  </StyleProvider>
+);
